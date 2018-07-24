@@ -38,21 +38,26 @@ def train(mnist):
 
     global_step = tf.Variable(0, trainable=False)
     variable_averages = tf.train.ExponentialMovingAverage(MOVING_AVERAGE_DECAY, global_step)
+    # 使用滑动平均模型对所有可训练的变量进行滑动平均
     variable_averages_op = variable_averages.apply(tf.trainable_variables())
 
     average_y = inference(x, variable_averages, weights1, biases1, weights2, biases2)
-    cross_entropy = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=y, labels=tf.argmax(y_, 1))
+
+    # 计算实际和标准的交叉熵
+    cross_entropy = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=y, labels=tf.argmax(y_, 1)) # 这里的y 不能写成average_y，因为其使用了滑动平均模型
     cross_entropy_mean = tf.reduce_mean(cross_entropy)
 
+    # 正则化所有的参数
     regularizer = tf.contrib.layers.l2_regularizer(REGULARIZATION_RATE)
 
     regularization = regularizer(weights1) + regularizer(weights2)
 
     loss = cross_entropy_mean + regularization
 
-
+    # 采用指数下降的学习率
     learning_rate = tf.train.exponential_decay(LEARNING_RATE_BASE, global_step, mnist.train.num_examples / BATCH_SIZE,LEARNING_RATE_DECAY)
 
+    # 使用随机梯度下降来进行学习
     train_step = tf.train.GradientDescentOptimizer(learning_rate).minimize(loss, global_step=global_step)
     with tf.control_dependencies([train_step, variable_averages_op]):
         train_op = tf.no_op(name="train")
