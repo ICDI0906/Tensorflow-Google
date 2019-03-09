@@ -1,0 +1,4 @@
+model_checkpoint_path: "/Users/icdi/Desktop/py_ws/tensorflow-Google/model/success.ckpt-201"
+all_model_checkpoint_paths: "/Users/icdi/Desktop/py_ws/tensorflow-Google/model/success.ckpt-1"
+all_model_checkpoint_paths: "/Users/icdi/Desktop/py_ws/tensorflow-Google/model/success.ckpt-101"
+all_model_checkpoint_paths: "/Users/icdi/Desktop/py_ws/tensorflow-Google/model/success.ckpt-201"
