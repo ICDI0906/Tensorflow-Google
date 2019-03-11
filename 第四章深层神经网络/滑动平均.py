@@ -1,5 +1,6 @@
 # set shadow variable
 import tensorflow as tf
+
 v1 = tf.Variable(0,dtype = tf.float32)
 step = tf.Variable(0,trainable = False)
 ema = tf.train.ExponentialMovingAverage(0.99 , step)
