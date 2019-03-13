@@ -30,6 +30,7 @@ def train(mnist):
 
 
     weights1 = tf.Variable(tf.truncated_normal([INPUT_NODE, LAYER1_NODE], stddev=0.1))
+
     biases1 = tf.Variable(tf.constant(0.1, shape=[LAYER1_NODE]))
     weights2 = tf.Variable(tf.truncated_normal([LAYER1_NODE, OUTPUT_NODE], stddev=0.1))
     biases2 = tf.Variable(tf.constant(0.1, shape=[OUTPUT_NODE]))
@@ -37,6 +38,7 @@ def train(mnist):
     y = inference(x, None, weights1, biases1, weights2, biases2)
 
     global_step = tf.Variable(0, trainable=False)
+
     variable_averages = tf.train.ExponentialMovingAverage(MOVING_AVERAGE_DECAY, global_step)
     # 使用滑动平均模型对所有可训练的变量进行滑动平均
     variable_averages_op = variable_averages.apply(tf.trainable_variables())
@@ -80,6 +82,7 @@ def train(mnist):
         test_acc = sess.run(accuracy, feed_dict=test_feed)
         print("After %d training step ,test accuracy using average model is %g" % (TRAINING_STEPS, test_acc))
 
+    writer = tf.summary.FileWriter('./graph', sess.graph)
 
 def main(argv=None):
     mnist = input_data.read_data_sets("Mnist_data", one_hot=True)
